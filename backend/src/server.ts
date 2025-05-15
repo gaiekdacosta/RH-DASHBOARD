@@ -9,12 +9,12 @@ const app = fastify({ logger: true });
 
 const PORT = process.env.PORT || 3000;
 
-useRoutes(app);
-
 app.register(fastifyCors, {
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 });
+
+useRoutes(app);
 
 app.listen({ port: Number(PORT) }, (err, address) => {
     if (err) {
