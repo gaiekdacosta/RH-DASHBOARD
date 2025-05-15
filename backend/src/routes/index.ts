@@ -17,5 +17,5 @@ export const useRoutes = (app: FastifyInstance) => {
 
     app.get('/vagas', vacanciesService.vacanciesList);
     app.get('/vagasPorMes', vacanciesService.vacanciesPerMonth);
-    app.get('/statusVagas/:period/:status', vacanciesService.statusVacancies);
+    app.get('/statusVagas/:periodo/:status', vacanciesService.statusVacancies);
 };
