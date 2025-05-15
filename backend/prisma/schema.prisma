@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model candidatos {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome         String         @default("")
+  telefone     String         @default("")
+  email        String         @default("")
+  foto_url     String         @default("")
+  candidaturas candidaturas[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model candidaturas {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  candidato_id     String     @default(dbgenerated("auth.uid()")) @db.Uuid
+  vaga_id          String     @default(dbgenerated("auth.uid()")) @db.Uuid
+  status           String     @default("")
+  data_candidatura DateTime   @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamptz(6)
+  nota_cv          Float      @db.Real
+  etapa            Int?       @db.SmallInt
+  candidatos       candidatos @relation(fields: [candidato_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vagas            vagas      @relation(fields: [vaga_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model vagas {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  titulo       String         @default("")
+  descricao    String         @default("")
+  status       String         @default("")
+  data_vaga    DateTime       @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamptz(6)
+  prioridade   String         @default("")
+  candidaturas candidaturas[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model colaboradores {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome          String   @default("")
+  funcao        String?  @default("")
+  setor         String?  @default("")
+  data_admissao DateTime @db.Date
+  ativo         Boolean?
+  tipo_funcao   String?
+}
