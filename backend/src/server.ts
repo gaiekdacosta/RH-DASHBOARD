@@ -16,10 +16,11 @@ app.register(fastifyCors, {
 
 useRoutes(app);
 
-app.listen({ port: Number(PORT) }, (err, address) => {
+app.listen({ port: Number(PORT), host: '0.0.0.0' }, (err, address) => {
     if (err) {
         app.log.error(err);
         process.exit(1);
     }
     app.log.info(`Server listening at ${address}`);
 });
+
